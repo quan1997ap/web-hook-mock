@@ -1,0 +1,58 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: template-register-catalog
+  title: template-register-catalog
+  description: template-register-catalog
+spec:
+  owner: roadie
+  type: service
+  parameters:
+    - title: Fill in some params for request
+      properties:
+        repoUrl:
+          title: RepoUrl
+          type: string
+          description: Path lưu trữ file backstage
+          ui:autofocus: true
+          ui:options:
+            rows: 15
+        name:
+          title: Name
+          type: string
+          description: Name
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        age:
+          title: Age
+          type: string
+          description: Age
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+
+  steps:
+    - id: forward-request
+      name: forward-request
+      action: http:backstage:request
+      input:
+        method: 'POST'
+        path: '/orchestrator-be/approvals/forward-request'
+        headers:
+          content-type: 'application/json'
+        body:
+          url: 'http://localhost:5000/update-user'
+          reqBody:  ${{parameters}}
+
+    - id: register-catalog
+      name: register-catalog
+      action: http:backstage:request
+      input:
+        method: 'POST'
+        path: '/orchestrator-be/approvals/register-catalog/111'
+        headers:
+          content-type: 'application/json'
+        body:
+          url: 'http://localhost:5000/update-user'
+          reqBody:  ${{parameters}}

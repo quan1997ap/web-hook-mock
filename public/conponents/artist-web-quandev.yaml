@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  tempBuilderId: 12343432
+  name: artist-web222222222222222
+  description: Description of artist-web
+  annotations:
+    pagerduty.com/integration-key: <sample-service-integration-key>
+  tags:
+    - java
+  links:
+    - url: https://admin.example-org.com
+      title: Admin Dashboard
+      icon: dashboard
+      type: admin-dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-a
+  system: project-x

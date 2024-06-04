@@ -1,0 +1,56 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: template-quandev
+  title: template-quandev
+  description: template-quandev
+spec:
+  owner: roadie
+  type: service
+  parameters:
+    - title: Fill in some params for request
+      properties:
+        repoUrl:
+          title: RepoUrl
+          type: string
+          description: Path lưu trữ file backstage
+          ui:autofocus: true
+          ui:options:
+            rows: 15
+        name:
+          title: Name
+          type: string
+          description: Name
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        age:
+          title: Age
+          type: string
+          description: Age
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+
+  steps:
+    - id: backstage_request_with_input
+      name: backstage request
+      action: http:backstage:request
+      input:
+        method: 'POST'
+        path: '/proxy/local-mock/update-user'
+        headers:
+          content-type: 'application/json'
+        body:
+          reqBody:  ${{parameters}}
+
+    - id: backstage_request_with_input
+      name: backstage request
+      action: http:backstage:request
+      input:
+        method: 'POST'
+        path: '/orchestrator-be/health/create-catalog'
+        headers:
+          content-type: 'application/json'
+        body:
+          reqBody:  ${{parameters}}
