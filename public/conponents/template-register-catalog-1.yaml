@@ -1,33 +1,50 @@
 kind: Template
 metadata:
-  name: 29395403-1950-4541-8f09-0b51a99c325711
-  description: Yaml of action history CreateDatabase
+  name: catalog1
+  description: catalog1
 spec:
   parameters:
     - required:
         - name
-        - host
+        - argocd
+        - test_link
       errorMessage:
         required:
           name: Name is required
-          host: Host is required
+          argocd: ArgoCD is required
+          test_link: Test Link is required
       properties:
         name:
           title: Name
           type: string
           description: ''
           ui:order: 1
-          default: vds-db
-        host:
-          title: Host
+          default: Create Gr service Quandev
+        description:
+          title: Description
           type: string
-          description: ''
+          description: Description
           ui:order: 2
+          default: Create Gr service Quandev
+          minLength: 1
+        argocd:
+          title: ArgoCD
+          type: string
+          description: Group Service
+          ui:order: 3
+          default: http://localhost:3000/self-service-action
+          format: uri
+        test_link:
+          title: Test Link
+          type: string
+          description: Test Link
+          ui:order: 4
           default: http://localhost:3000/self-service-action
           format: uri
       type: object
-      title: 29395403-1950-4541-8f09-0b51a99c3257
+      title: catalog1
   type: Service
+  title: catalog1
   steps:
     - id: backstage_request_to_webhook
       name: backstage request to webhook
@@ -35,17 +52,20 @@ spec:
       input:
         method: POST
         path: /orchestrator-be/forward-request
-        body: '{"name":"test","parameters":"${{ parameters }}","forward":{"url":"http://localhost:3000/self-service-action","type":2,"method":"POST"}}'
+        body:
+          reqBody: ${{parameters}}
+          forwardTo:
+            url: http://localhost:5000/update-user
+            type: 2
+            method: POST
     - id: register_catalog_callback
       name: register catalog callback
       action: http:backstage:request
       input:
         method: POST
         path: /orchestrator-be/catalogs
-        headers:
-          content-type: application/json
         body:
-          parameters: ${{ parameters }}
+          reqBody: ${{parameters}}
           response: '{{ steps.backstage_request_to_webhook.output.body }}'
   lifecycle: production
 apiVersion: scaffolder.backstage.io/v1beta3

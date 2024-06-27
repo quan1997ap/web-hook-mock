@@ -1,6 +1,6 @@
 kind: Template
 metadata:
-  name: 29395403-1950-4541-8f09-0b51a99c325711
+  name: 9993fd65-c7c1-4a70-a486-4f0b3b5bf746
   description: Yaml of action history CreateDatabase
 spec:
   parameters:
@@ -23,10 +23,10 @@ spec:
           type: string
           description: ''
           ui:order: 2
-          default: http://localhost:3000/self-service-action
+          default: http://localhost:3000
           format: uri
       type: object
-      title: 29395403-1950-4541-8f09-0b51a99c3257
+      title: 9993fd65-c7c1-4a70-a486-4f0b3b5bf746
   type: Service
   steps:
     - id: backstage_request_to_webhook
@@ -35,7 +35,9 @@ spec:
       input:
         method: POST
         path: /orchestrator-be/forward-request
-        body: '{"name":"test","parameters":"${{ parameters }}","forward":{"url":"http://localhost:3000/self-service-action","type":2,"method":"POST"}}'
+        headers:
+          content-type: application/json
+        body: '{"parameters":"${{ parameters }}","forward":{"url":"http://localhost:3000/update-user","type":2,"method":"POST"}}'
     - id: register_catalog_callback
       name: register catalog callback
       action: http:backstage:request
